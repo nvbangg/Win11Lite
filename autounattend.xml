@@ -3,9 +3,48 @@
     <settings pass="oobeSystem">
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <OOBE>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
                 <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <ProtectYourPC>3</ProtectYourPC>
             </OOBE>
+
+            <UserAccounts>
+                <LocalAccounts>
+                    <LocalAccount wcm:action="add">
+                        <Name>Admin</Name>
+                        <DisplayName>Admin</DisplayName>
+                        <Group>Administrators</Group>
+                        <Password>
+                            <Value>Admin</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                    </LocalAccount>
+                </LocalAccounts>
+            </UserAccounts>
+
+            <AutoLogon>
+                <Password>
+                    <Value>Admin</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <LogonCount>1</LogonCount>
+                <Username>Admin</Username>
+            </AutoLogon>
+
         </component>
+
+        <!--! BEGIN ADD -->
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+        <!--! END ADD -->
+
     </settings>
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
         <ConfigureChatAutoInstall>false</ConfigureChatAutoInstall>
@@ -17,7 +56,9 @@
             </DynamicUpdate>
             <ImageInstall>
                 <OSImage>
-                    <Compact>true</Compact>
+
+                    <!--! <Compact>true</Compact> -->
+
                     <WillShowUI>OnError</WillShowUI>
                     <InstallFrom>
                         <MetaData wcm:action="add">
@@ -27,11 +68,29 @@
                     </InstallFrom>
                 </OSImage>
             </ImageInstall>
+
+            <!--! BEGIN MODIFY -->
             <UserData>
+                <AcceptEula>true</AcceptEula>
                 <ProductKey>
-                    <Key/>
+                    <Key></Key>
+                    <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
+                <SkipProductKey>true</SkipProductKey>
             </UserData>
+            <!--! END MODIFY -->
+
         </component>
+
+        <!--! BEGIN ADD -->
+        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+        <!--! END ADD -->
+
     </settings>
 </unattend>
