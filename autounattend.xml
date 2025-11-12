@@ -4,13 +4,11 @@
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <OOBE>
                 <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
-                <!--! ADD -->
                 <HideLocalAccountScreen>true</HideLocalAccountScreen>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
                 <ProtectYourPC>3</ProtectYourPC>
 
             </OOBE>
-            <!--! ADD -->
             <UserAccounts>
                 <LocalAccounts>
                     <LocalAccount wcm:action="add">
@@ -35,7 +33,6 @@
             </AutoLogon>
 
         </component>
-        <!--! ADD -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
@@ -43,7 +40,6 @@
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>en-US</UserLocale>
         </component>
-
     </settings>
     <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
         <ConfigureChatAutoInstall>false</ConfigureChatAutoInstall>
@@ -55,7 +51,6 @@
             </DynamicUpdate>
             <ImageInstall>
                 <OSImage>
-                    <!--! <Compact>true</Compact> -->
                     <WillShowUI>OnError</WillShowUI>
                     <InstallFrom>
                         <MetaData wcm:action="add">
@@ -65,7 +60,6 @@
                     </InstallFrom>
                 </OSImage>
             </ImageInstall>
-            <!--! MODIFY -->
             <UserData>
                 <AcceptEula>true</AcceptEula>
                 <ProductKey>
@@ -74,9 +68,7 @@
                 </ProductKey>
                 <SkipProductKey>true</SkipProductKey>
             </UserData>
-
         </component>
-        <!--! ADD -->
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
@@ -84,6 +76,5 @@
             <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>en-US</UserLocale>
         </component>
-
     </settings>
 </unattend>

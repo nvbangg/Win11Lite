@@ -96,7 +96,6 @@ if (! $myWindowsPrincipal.IsInRole($adminRole))
     exit
 }
 
-#! MODIFY
 if (-not (Test-Path -Path "$PSScriptRoot\autounattend.xml")) {
     Write-Output "Error: File autounattend.xml not found in script directory."
     Write-Output "Please make sure autounattend.xml is in the same folder as tiny11maker.ps1"
@@ -224,11 +223,9 @@ $packagePrefixes = 'AppUp.IntelManagementandSecurityStatus',
 'Microsoft.MicrosoftSolitaireCollection',
 'Microsoft.MicrosoftStickyNotes',
 'Microsoft.MixedReality.Portal',
-#! 'Microsoft.MSPaint',
 'Microsoft.Office.OneNote',
 'Microsoft.OfficePushNotificationUtility',
 'Microsoft.OutlookForWindows',
-#! 'Microsoft.Paint',
 'Microsoft.People',
 'Microsoft.PowerAutomateDesktop',
 'Microsoft.SkypeApp',
@@ -238,13 +235,10 @@ $packagePrefixes = 'AppUp.IntelManagementandSecurityStatus',
 'Microsoft.Windows.DevHome',
 'Microsoft.Windows.Copilot',
 'Microsoft.Windows.Teams',
-#! 'Microsoft.WindowsAlarms',
-#! 'Microsoft.WindowsCamera',
 'microsoft.windowscommunicationsapps',
 'Microsoft.WindowsFeedbackHub',
 'Microsoft.WindowsMaps',
 'Microsoft.WindowsSoundRecorder',
-#! 'Microsoft.WindowsTerminal',
 'Microsoft.Xbox.TCUI',
 'Microsoft.XboxApp',
 'Microsoft.XboxGameOverlay',
@@ -258,8 +252,6 @@ $packagePrefixes = 'AppUp.IntelManagementandSecurityStatus',
 'MicrosoftCorporationII.QuickAssist',
 'MSTeams',
 'MicrosoftTeams' 
-#! 'Microsoft.WindowsTerminal',
-#! 'Microsoft.549981C3F5F10'
 
 $packagesToRemove = $packages | Where-Object {
     $packageName = $_
@@ -269,19 +261,7 @@ foreach ($package in $packagesToRemove) {
     & 'dism' '/English' "/image:$($ScratchDisk)\scratchdir" '/Remove-ProvisionedAppxPackage' "/PackageName:$package"
 }
 
-#! Write-Output "Removing Edge:"
-# Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft\Edge" -Recurse -Force | Out-Null
-# Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft\EdgeUpdate" -Recurse -Force | Out-Null
-# Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft\EdgeCore" -Recurse -Force | Out-Null
-# & 'takeown' '/f' "$ScratchDisk\scratchdir\Windows\System32\Microsoft-Edge-Webview" '/r' | Out-Null
-# & 'icacls' "$ScratchDisk\scratchdir\Windows\System32\Microsoft-Edge-Webview" '/grant' "$($adminGroup.Value):(F)" '/T' '/C' | Out-Null
-# Remove-Item -Path "$ScratchDisk\scratchdir\Windows\System32\Microsoft-Edge-Webview" -Recurse -Force | Out-Null
-
-#! MODIFY
 Write-Output "Removing OneDrive:"
-# & 'takeown' '/f' "$ScratchDisk\scratchdir\Windows\System32\OneDriveSetup.exe" | Out-Null
-# & 'icacls' "$ScratchDisk\scratchdir\Windows\System32\OneDriveSetup.exe" '/grant' "$($adminGroup.Value):(F)" '/T' '/C' | Out-Null
-# # Remove-Item -Path "$ScratchDisk\scratchdir\Windows\System32\OneDriveSetup.exe" -Force | Out-Null
 dism /Image:"$ScratchDisk\scratchdir" /Remove-ProvisionedAppxPackage /PackageName:Microsoft.OneDriveSync_8wekyb3d8bbwe | Out-Null
 Remove-Item -Path "$ScratchDisk\scratchdir\Program Files\Microsoft OneDrive" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "$ScratchDisk\scratchdir\Program Files (x86)\Microsoft OneDrive" -Recurse -Force -ErrorAction SilentlyContinue
@@ -290,7 +270,6 @@ reg delete "HKU\Default\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDr
 reg delete "HKU\Default\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDrive" /f 2>$null
 reg unload HKU\Default
 Write-Output "Removal complete!"
-
 Start-Sleep -Seconds 2
 Clear-Host
 Write-Output "Loading registry..."
@@ -314,14 +293,9 @@ Write-Output "Disabling Sponsored Apps:"
 Set-RegistryValue 'HKLM\zNTUSER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'OemPreInstalledAppsEnabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'PreInstalledAppsEnabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SilentInstalledAppsEnabled' 'REG_DWORD' '0'
-
-#! MODIFY
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\CloudContent' 'DisableWindowsConsumerFeatures' 'REG_DWORD' '1'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'ContentDeliveryAllowed' 'REG_DWORD' '0'
-# Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\PolicyManager\current\device\Start' 'ConfigureStartPins' 'REG_SZ' '{"pinnedList": [{}]}'
-Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\StartPage' 'StartPinnedLayout' 'REG_DWORD' '0'
-
-Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'FeatureManagementEnabled' 'REG_DWORD' '0'
+# Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' 'Start_Layout' 'REG_SZ' '{"pinnedList": [{}]}'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'PreInstalledAppsEverEnabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SoftLandingEnabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SubscribedContentEnabled' 'REG_DWORD' '0'
@@ -332,37 +306,18 @@ Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Conten
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SubscribedContent-353694Enabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SubscribedContent-353696Enabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager' 'SystemPaneSuggestionsEnabled' 'REG_DWORD' '0'
-
-#! MODIFY
-Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\PushToInstall' 'DisablePushToInstall' 'REG_DWORD' '1'
-Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\MRT' 'DontOfferThroughWUAU' 'REG_DWORD' '1'
-# Remove-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions'
-#* Remove-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SuggestedApps'
-Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\CloudContent' 'DisableConsumerAccountStateContent' 'REG_DWORD' '0'
-Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\CloudContent' 'DisableCloudOptimizedContent' 'REG_DWORD' '0'
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v TaskbarDa /t REG_DWORD /d 0 /f
-
+Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\CloudContent' 'DisableConsumerAccountStateContent' 'REG_DWORD' '1'
+Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\CloudContent' 'DisableCloudOptimizedContent' 'REG_DWORD' '1'
 Write-Output "Enabling Local Accounts on OOBE:"
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\OOBE' 'BypassNRO' 'REG_DWORD' '1'
 Copy-Item -Path "$PSScriptRoot\autounattend.xml" -Destination "$ScratchDisk\scratchdir\Windows\System32\Sysprep\autounattend.xml" -Force | Out-Null
 
-#! MODIFY
-#! Write-Output "Disabling Reserved Storage:"
-# Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager' 'ShippedWithReserves' 'REG_DWORD' '0'
-# Write-Output "Disabling BitLocker Device Encryption"
-# Set-RegistryValue 'HKLM\zSYSTEM\ControlSet001\Control\BitLocker' 'PreventDeviceEncryption' 'REG_DWORD' '1'
-Write-Output "Preventing automatic BitLocker encryption"
+Write-Output "Disabling BitLocker Device Encryption"
 Set-RegistryValue 'HKLM\zSYSTEM\ControlSet001\Control\BitLocker' 'PreventDeviceEncryption' 'REG_DWORD' '1'
-Set-RegistryValue 'HKLM\zSYSTEM\ControlSet001\Control\BitLocker' 'PreventAutoEncryption' 'REG_DWORD' '1'
 Write-Output "Disabling Chat icon:"
-# Set-RegistryValue 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\Windows Chat' 'ChatIcon' 'REG_DWORD' '3'
-Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced' 'TaskbarMn' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced' 'TaskbarMn' 'REG_DWORD' '0'
-#! Write-Output "Removing Edge related registries"
-# Remove-RegistryValue "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge"
-# Remove-RegistryValue "HKEY_LOCAL_MACHINE\zSOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update"
+# Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' 'TaskbarDa' 'REG_DWORD' '0'
 Write-Output "Disabling OneDrive folder backup"
-# Set-RegistryValue "HKLM\zSOFTWARE\Policies\Microsoft\Windows\OneDrive" "DisableFileSyncNGSC" "REG_DWORD" "1"
 Remove-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Run\OneDriveSetup'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\OneDrive' 'DisableTutorial' 'REG_DWORD' '1'
 Write-Output "Disabling Telemetry:"
@@ -375,50 +330,19 @@ Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\InputPersonalization' 'Restri
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\InputPersonalization\TrainedDataStore' 'HarvestContacts' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Personalization\Settings' 'AcceptedPrivacyPolicy' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\DataCollection' 'AllowTelemetry' 'REG_DWORD' '0'
-Set-RegistryValue 'HKLM\zSYSTEM\ControlSet001\Services\dmwappushservice' 'Start' 'REG_DWORD' '4'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location' 'Value' 'REG_SZ' 'Deny'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Settings\FindMyDevice' 'LocationSyncEnabled' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\Diagnostics\DiagTrack' 'ShowedToastAtLevel' 'REG_DWORD' '1'
+Set-RegistryValue 'HKLM\zNTUSER\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications' 'EnableAccountNotifications' 'REG_DWORD' '0'
 
 ## Prevents installation of DevHome and Outlook
 Write-Output "Prevents installation of DevHome and Outlook:"
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Orchestrator\UScheduler_Oobe\OutlookUpdate' 'workCompleted' 'REG_DWORD' '1'
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Orchestrator\UScheduler\OutlookUpdate' 'workCompleted' 'REG_DWORD' '1'
-
-#! MODIFY
 Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Orchestrator\UScheduler\DevHomeUpdate'
-Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\OutlookUpdate'
-Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\DevHomeUpdate'
 Write-Output "Disabling Copilot"
-Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TurnOffWindowsCopilot'
-# Set-RegistryValue 'HKLM\zSOFTWARE\Policies\Microsoft\Edge' 'HubsSidebarEnabled' 'REG_DWORD' '0'
-# Set-RegistryValue 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\Explorer' 'DisableSearchBoxSuggestions' 'REG_DWORD' '1'
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced' 'ShowCopilotButton' 'REG_DWORD' '0'
 Set-RegistryValue 'HKLM\zSOFTWARE\Microsoft\Windows\CurrentVersion\SearchSettings' 'IsDynamicSearchBoxEnabled' 'REG_DWORD' '0'
-Write-Output "Prevents installation of Teams:"
-# Set-RegistryValue 'HKLM\zSOFTWARE\Policies\Microsoft\Teams' 'DisableInstallation' 'REG_DWORD' '1'
-Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\OutlookUpdate'
-Write-Output "Prevent installation of New Outlook:"
-# Set-RegistryValue 'HKLM\zSOFTWARE\Policies\Microsoft\Windows\Windows Mail' 'PreventRun' 'REG_DWORD' '1'
-Remove-RegistryValue 'HKLM\zSOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler\OutlookUpdate'
-Write-Host "Deleting scheduled task definition files..."
-# $tasksPath = "$ScratchDisk\scratchdir\Windows\System32\Tasks"
-# Application Compatibility Appraiser
-# Remove-Item -Path "$tasksPath\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" -Force -ErrorAction SilentlyContinue
-# Customer Experience Improvement Program (removes the entire folder and all tasks within it)
-# Remove-Item -Path "$tasksPath\Microsoft\Windows\Customer Experience Improvement Program" -Recurse -Force -ErrorAction SilentlyContinue
-# # Program Data Updater
-# Remove-Item -Path "$tasksPath\Microsoft\Windows\Application Experience\ProgramDataUpdater" -Force -ErrorAction SilentlyContinue
-# # Chkdsk Proxy
-# Remove-Item -Path "$tasksPath\Microsoft\Windows\Chkdsk\Proxy" -Force -ErrorAction SilentlyContinue
-# # Windows Error Reporting (QueueReporting)
-# Remove-Item -Path "$tasksPath\Microsoft\Windows\Windows Error Reporting\QueueReporting" -Force -ErrorAction SilentlyContinue
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /DISABLE 2>$null
-schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /DISABLE 2>$null
-schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /DISABLE 2>$null
-schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /DISABLE 2>$null
-
-Write-Host "Task files have been deleted."
 Write-Host "Unmounting Registry..."
 reg unload HKLM\zCOMPONENTS | Out-Null
 reg unload HKLM\zDEFAULT | Out-Null
@@ -519,9 +443,6 @@ Write-Output "Iso drive ejected"
 Write-Output "Removing oscdimg.exe..."
 Remove-Item -Path "$PSScriptRoot\oscdimg.exe" -Force -ErrorAction SilentlyContinue
 
-#! Write-Output "Removing autounattend.xml..."
-# Remove-Item -Path "$PSScriptRoot\autounattend.xml" -Force -ErrorAction SilentlyContinue
-
 Write-Output "Cleanup check :"
 if (Test-Path -Path "$ScratchDisk\tiny11") {
     Write-Output "tiny11 folder still exists. Attempting to remove it again..."
@@ -557,20 +478,8 @@ if (Test-Path -Path "$PSScriptRoot\oscdimg.exe") {
     Write-Output "oscdimg.exe does not exist. No action needed."
 }
 
-#! REMOVE
-# if (Test-Path -Path "$PSScriptRoot\autounattend.xml") {
-#     Write-Output "autounattend.xml still exists. Attempting to remove it again..."
-#     Remove-Item -Path "$PSScriptRoot\autounattend.xml" -Force -ErrorAction SilentlyContinue
-#     if (Test-Path -Path "$PSScriptRoot\autounattend.xml") {
-#         Write-Output "Failed to remove autounattend.xml."
-#     } else {
-#         Write-Output "autounattend.xml removed successfully."
-#     }
-# } else {
-#     Write-Output "autounattend.xml does not exist. No action needed."
-# }
-
 # Stop the transcript
 Stop-Transcript
 
 exit
+
